@@ -2,7 +2,7 @@
 // You can import this data from anywhere in your site by using the `import` keyword.
 export const CONFIG: PortfolioConfig = {
   meta: {
-    title: "senouci moulay — développeur fullstack",
+    title: "senouci moulay — développeur fullstack orienté produit",
     description:
       "Senouci Moulay est développeur fullstack. Il conçoit des applications dynamiques et centrées utilisateur avec Java, Spring Boot, TypeScript, Angular, Next.js et Postgres.",
     siteLabel: "senouci-moulay",
@@ -27,7 +27,7 @@ const iota = () => id++;
 
 export const USER = {
   name: "Senouci Moulay",
-  role: "développeur fullstack",
+  role: "développeur fullstack orienté produit",
   location: "toulouse, france",
   birthday: "1998-11-11",
   headline: `Développeur fullstack avec 4 ans d'expérience. Je conçois des produits web complets, du front à l'infra : plateformes IA/RAG, outils métier, applications immobilières et paiements Stripe, avec Java/Spring Boot, TypeScript, React/Next.js et Postgres.`,
@@ -344,7 +344,7 @@ export type Locale = "fr" | "en";
 
 export const CONFIG_EN: PortfolioConfig = {
   meta: {
-    title: "senouci moulay — fullstack developer",
+    title: "senouci moulay — full-stack product engineer",
     description:
       "Senouci Moulay is a fullstack developer building dynamic, user-focused applications with Java, Spring Boot, TypeScript, Angular, Next.js, and Postgres.",
     siteLabel: "senouci-moulay",
@@ -366,7 +366,7 @@ export const CONFIG_EN: PortfolioConfig = {
 
 export const USER_EN = {
   ...USER,
-  role: "fullstack developer",
+  role: "full-stack product engineer",
   headline: `Fullstack developer with 4 years of experience. I build complete web products from frontend to infrastructure: AI/RAG platforms, business tools, real-estate applications, and Stripe payment flows with Java/Spring Boot, TypeScript, React/Next.js, and Postgres.`,
   experiences: {
     theBeginning:

@@ -26,6 +26,7 @@ const formatEducationRange = (
     : yearFormatter.format(entry.startDate);
 
 const bio = USER.headline;
+const printBio = USER.printHeadline;
 ---
 
 <BasePage>
@@ -92,9 +93,14 @@ const bio = USER.headline;
     <section class="mt-12">
       <SectionLabel label={labels.bio} />
       <p
-        class="max-w-[64ch] text-sm leading-relaxed text-pretty text-foreground/90"
+        class="print-hide max-w-[64ch] text-sm leading-relaxed text-pretty text-foreground/90"
       >
         {bio}
+      </p>
+      <p
+        class="print-only max-w-[64ch] text-sm leading-relaxed text-foreground/90"
+      >
+        {printBio}
       </p>
     </section>
 

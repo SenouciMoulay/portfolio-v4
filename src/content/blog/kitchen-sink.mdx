@@ -1,0 +1,128 @@
+---
+title: "Référence Markdown"
+description: "Tous les éléments pris en charge au même endroit : titres, listes, tableaux, citations, images, code mis en valeur et composant d'appel stylisé."
+pubDate: "2026-06-23"
+tags: ["référence", "mdx", "typographie"]
+---
+
+Cette note sert à tester toute la chaîne de rendu : Markdown compatible GitHub
+via `remark-gfm`, coloration syntaxique via `rehype-pretty-code` avec un thème
+Shiki papier/encre personnalisé, et composant MDX stylisé. Si le rendu est
+propre ici, il le sera partout.
+
+<Callout type="note">
+  Les encadrés sont des composants MDX personnalisés, pas du Markdown. Ils sont
+  importés dans la carte des composants et utilisés directement dans les
+  fichiers `.mdx`, sans syntaxe supplémentaire.
+</Callout>
+
+## Texte et marques inline
+
+Le texte courant prend en charge le **gras**, l'_italique_, le **_gras
+italique_**, le ~~barré~~, le `code` inline, les [liens internes](/blog) et les
+[liens externes](https://nextjs.org). Les références façon notes de bas de page
+et les lignes courtes gardent le tout lisible en monospace.
+
+### Titre de niveau trois
+
+Les sections plus petites s'imbriquent sous leurs parents avec le marqueur ASCII
+`###`, ce qui donne un plan proche d'une arborescence avant même de lire le
+contenu.
+
+## Listes
+
+Les listes non ordonnées utilisent un marqueur façon terminal :
+
+- Premier élément, sans imbrication
+- Deuxième élément avec une sous-liste
+  - Premier enfant imbriqué
+  - Deuxième enfant imbriqué
+- Troisième élément avec du `code` inline
+
+Les listes ordonnées ont des numéros teintés avec la couleur d'accent :
+
+1. Installer les dépendances
+2. Brancher le plugin rehype
+3. Encadrer la sortie comme un terminal
+4. Livrer
+
+Les task lists (GFM) s'affichent avec des cases à cocher :
+
+- [x] Coloration syntaxique
+- [x] Cadre terminal
+- [ ] Mode sombre (un jour)
+
+## Citation
+
+> Le design, ce n'est pas seulement l'apparence ou la sensation.
+> Le design, c'est la façon dont cela fonctionne.
+>
+> — paraphrase du suspect habituel
+
+## Tableau
+
+Les tableaux compatibles GitHub s'affichent comme une grille monospace compacte :
+
+| Élément  | Source        | Stylisé par      |
+| -------- | ------------- | ---------------- |
+| Titres   | markdown `##` | `mdx-components` |
+| Code     | bloc clôturé  | `rehype-pretty`  |
+| Encadré  | composant JSX | `Callout`        |
+| Tableaux | `remark-gfm`  | `prose-terminal` |
+
+## Code avec coloration
+
+La coloration inline, la mise en valeur de lignes et les libellés de langage
+fonctionnent. Voici du TypeScript avec les lignes 2 et 6 marquées :
+
+```ts {2,6}
+export function layout(text: string, width: number) {
+  const segments = prepareWithSegments(text);
+  const lines = layoutWithLines(segments, width);
+  return {
+    lineCount: lines.length,
+    widest: Math.max(...lines.map((l) => l.width)),
+  };
+}
+```
+
+Un extrait shell (note le libellé du langage dans le chrome de la fenêtre) :
+
+```bash
+pnpm add rehype-pretty-code shiki
+pnpm dev
+```
+
+Mise en valeur d'un terme précis avec la syntaxe `/segments/` :
+
+```js /segments/
+const segments = prepareWithSegments(input);
+render(segments);
+```
+
+<Callout type="warn" title="! attention">
+  `rehype-pretty-code` émet ses styles dans la même couche que le plugin de
+  typographie. Les surcharges `prose-terminal` sont volontairement hors couche
+  pour gagner la cascade — voir `app/globals.css`.
+</Callout>
+
+## Image
+
+Les images reçoivent un cadre fin et une légende discrète :
+
+![Une illustration terminal minimale en papier et encre](../../assets/blog/kitchen-sink.png)
+
+## Séparateur horizontal
+
+Ci-dessous, un séparateur thématique puis une ligne de conclusion.
+
+---
+
+Voilà tout le vocabulaire. Tout ce qui sera écrit dans une note retombera sur
+l'un de ces styles, avec la même palette papier/encre en trois couleurs.
+
+<Callout type="tip">
+  Besoin d'un nouveau style d'élément ? Il suffit de le définir une fois dans
+  `prose-terminal` ou de l'ajouter à la carte des composants : chaque note en
+  héritera automatiquement.
+</Callout>

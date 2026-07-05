@@ -1,0 +1,163 @@
+---
+import { getLocaleData, localeFromPath } from "../consts";
+import AsciiGlobe from "./AsciiGlobe.astro";
+import BaseHead from "./BaseHead.astro";
+import BasePage from "./BasePage.astro";
+import ConstellationResume from "./ConstellationResume.astro";
+import ExperienceConsole from "./ExperienceConsole.astro";
+import ProjectsManifest from "./ProjectsManifest.astro";
+import ScrambleLink from "./ScrambleLink.astro";
+import SectionLabel from "./SectionLabel.astro";
+
+const locale = localeFromPath(Astro.url.pathname);
+const { config: CONFIG, labels, user: USER } = getLocaleData(locale);
+const email = USER.socials.find((social) => social.label === "mail");
+const links = USER.socials.filter((social) => social.label !== "mail");
+
+const yearFormatter = new Intl.DateTimeFormat(
+  locale === "en" ? "en-US" : "fr-FR",
+  { year: "numeric" },
+);
+const formatEducationRange = (
+  entry: (typeof USER.education.entries)[number],
+) =>
+  entry.endDate
+    ? `${yearFormatter.format(entry.startDate)} — ${yearFormatter.format(entry.endDate)}`
+    : yearFormatter.format(entry.startDate);
+
+const bio = USER.headline;
+---
+
+<BasePage>
+  <Fragment slot="head">
+    <BaseHead
+      title={CONFIG.meta.title}
+      description={CONFIG.meta.description}
+      imageAlt={USER.name}
+    />
+  </Fragment>
+
+  <main class="mx-auto max-w-3xl px-5 pt-12 pb-16 sm:pt-16">
+    <header class="grid gap-8 lg:grid-cols-[minmax(0,1fr)_15rem]">
+      <div>
+        <p class="terminal-command mb-3 text-xs text-muted-foreground">
+          <span class="text-accent">$</span>{" "}
+          {CONFIG.ui.terminalCommand}
+        </p>
+        <h1
+          class="text-3xl leading-tight font-bold tracking-tight text-pretty text-foreground sm:text-4xl"
+        >
+          {USER.name.toLowerCase()}
+        </h1>
+        <p class="screen-contact mt-3 text-sm text-muted-foreground">
+          {USER.role}
+          <span class="px-2 text-border">·</span>
+          {USER.location}
+          {
+            email && (
+              <>
+                <span class="px-2 text-border">·</span>
+                <ScrambleLink
+                  href={email.href}
+                  label={email.href.replace("mailto:", "")}
+                  external={false}
+                />
+              </>
+            )
+          }
+        </p>
+        <p class="print-only print-contact">
+          {USER.role} · {USER.location}
+          {email && ` · ${email.href.replace("mailto:", "")}`}
+        </p>
+
+        <nav
+          class="mt-5 flex flex-wrap gap-x-5 gap-y-2 text-sm"
+          aria-label={labels.profileLinks}
+        >
+          {
+            links.map((link) => (
+              <ScrambleLink
+                href={link.href}
+                label={link.label}
+                external={link.href.startsWith("http")}
+              />
+            ))
+          }
+        </nav>
+      </div>
+      <AsciiGlobe {...USER.asciiGlobe} />
+    </header>
+
+    <section class="mt-12">
+      <SectionLabel label={labels.bio} />
+      <p
+        class="max-w-[64ch] text-sm leading-relaxed text-pretty text-foreground/90"
+      >
+        {bio}
+      </p>
+    </section>
+
+    <section class="mt-14">
+      <SectionLabel label={labels.experience} />
+      <ExperienceConsole experiences={USER.experiences.entries} />
+    </section>
+
+    <section class="print-hide mt-14">
+      <SectionLabel label={labels.projects} />
+      <ProjectsManifest projects={USER.projects.entries} />
+    </section>
+
+    <section class="mt-14">
+      <SectionLabel label={labels.education} />
+      <ul class="space-y-5">
+        {
+          USER.education.entries.map((entry) => (
+            <li class="flex flex-col gap-1">
+              <div class="flex flex-wrap items-baseline justify-between gap-x-4">
+                <h3 class="font-medium text-foreground">
+                  {entry.title.toLowerCase()}
+                </h3>
+                <span class="text-xs text-muted-foreground">
+                  {formatEducationRange(entry)}
+                </span>
+              </div>
+              <p class="text-sm text-muted-foreground">
+                {entry.organization.toLowerCase()}
+                {entry.actionLabel && (
+                  <>
+                    <span class="px-2 text-border">·</span>
+                    {entry.href ? (
+                      <ScrambleLink
+                        href={entry.href}
+                        label={entry.actionLabel.toLowerCase()}
+                        external
+                      />
+                    ) : (
+                      entry.actionLabel.toLowerCase()
+                    )}
+                  </>
+                )}
+              </p>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <section class="mt-14">
+      <SectionLabel label={labels.softSkills} />
+      <ul class="soft-skills-list flex flex-wrap gap-2 text-sm">
+        {
+          USER.softSkills.map((skill) => (
+            <li class="border border-border px-2.5 py-1 text-muted-foreground">
+              {skill.toLowerCase()}
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+  </main>
+
+  <ConstellationResume />
+</BasePage>
